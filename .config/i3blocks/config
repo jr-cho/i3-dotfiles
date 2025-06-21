@@ -1,0 +1,41 @@
+# ========================================
+# i3blocks - Catppuccin Mocha Theme
+# ========================================
+
+# General appearance
+color=#cdd6f4
+background=#1e1e2e
+separator=false
+separator_block_width=15
+markup=pango
+
+[i3]
+command=~/.config/i3blocks/scripts/i3_workspaces.sh
+interval=1
+signal=1
+
+[title]
+command=~/.config/i3blocks/scripts/window_title.sh
+interval=1
+signal=2
+
+[volume]
+command=~/.config/i3blocks/scripts/volume.sh
+interval=1
+signal=3
+
+[flameshot]
+command=~/.config/i3blocks/scripts/flameshot-toggle.sh
+interval=once
+signal=4
+
+[menu]
+command=~/.config/i3blocks/scripts/menu.sh
+interval=once
+signal=5
+
+[time]
+command=~/.config/i3blocks/scripts/datetime.sh
+interval=60
+signal=6
+

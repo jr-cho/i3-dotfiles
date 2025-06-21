@@ -1,0 +1,38 @@
+# ~/.config/zathura/zathurarc
+
+# Font
+set font "monospace 12"
+
+# Recolor PDF pages (dark mode)
+set recolor true
+set recolor-keephue true
+set recolor-darkcolor "#201c2c"    # Background
+set recolor-lightcolor "#cdd6f4"   # Foreground
+
+# Default interface colors
+set default-bg "#1e1e2e"
+set default-fg "#cdd6f4"
+
+# UI components
+set completion-bg "#1e1e2e"
+set completion-fg "#cdd6f4"
+set completion-group-bg "#313244"
+set completion-group-fg "#cba6f7"
+
+set inputbar-bg "#1e1e2e"
+set inputbar-fg "#cdd6f4"
+set statusbar-bg "#1e1e2e"
+set statusbar-fg "#89b4fa"
+
+set notification-bg "#1e1e2e"
+set notification-fg "#f9e2af"
+set notification-error-bg "#1e1e2e"
+set notification-error-fg "#f38ba8"
+set notification-warning-bg "#1e1e2e"
+set notification-warning-fg "#fab387"
+
+# Highlight (for searching/selecting)
+set highlight-color "#f38ba8"
+set highlight-active-color "#fab387"
+
+map <F5> recolor
