@@ -1,0 +1,90 @@
+set $mod Mod4
+
+# Workspaces
+set $ws1 "1"
+set $ws2 "2"
+
+# Monitors
+workspace $ws1 output DP-4
+workspace $ws2 output HDMI-0
+
+# Browser
+bindsym $mod+f exec firefox
+
+# Files
+bindsym $mod+e exec thunar
+
+# Terminal
+bindsym $mod+Return exec kitty
+
+# Kill Window
+bindsym $mod+q kill
+
+# dmenu
+bindsym $mod+d exec dmenu_run
+
+# Change Focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# Floating Windows
+bindsym $mod+Shift+space floating toggle
+
+# Reload and Restart i3
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exit
+
+# =====================
+#     Window Theme
+# =====================
+font pango:JetBrainsMono Nerd Font 10
+
+client.focused          #89b4fa  #1e1e2e    #cdd6f4  #89b4fa    #89b4fa
+client.focused_inactive #181825  #181825    #cdd6f4  #181825    #181825
+client.unfocused        #181825  #181825    #cdd6f4  #181825    #181825
+client.urgent           #f38ba8  #f38ba8    #cdd6f4  #f38ba8    #f38ba8
+client.placeholder      #313244  #313244    #cdd6f4  #313244    #313244
+
+# Boarder
+default_border none
+default_floating_border none
+
+new_window none
+new_float none
+
+# Gaps
+gaps inner 5
+gaps outer 0
+
+# i3bar
+bar {
+    status_command i3status
+    position top
+    font pango:JetBrainsMono Nerd Font 10
+
+    # Catppuccin Mocha Colors
+    colors {
+        background #1e1e2e
+        statusline #cdd6f4
+        separator  #313244
+
+        focused_workspace  #89b4fa #89b4fa #1e1e2e
+        active_workspace   #313244 #313244 #cdd6f4
+        inactive_workspace #181825 #181825 #cdd6f4
+        urgent_workspace   #f38ba8 #f38ba8 #1e1e2e
+        binding_mode       #f9e2af #f9e2af #1e1e2e
+    }
+
+    tray_output primary
+}
+
+# Start Up
+exec --no-startup-id picom --experimental-backends
+exec --no-startup-id dunst
+exec --no-startup-id flameshot
+exec_always --no-startup-id feh --bg-scale ~/Pictures/wallpaper/minimalist-black-hole.png
+
+# Start Up Monitor ONLY
+exec_always --no-startup-id xrandr --output DP-4 --primary --mode 1920x1080 --rate 165 --pos 0x0 --output HDMI-0 --mode 1920x1080 --rate 60 --pos 1920x0
