@@ -9,12 +9,16 @@ CYAN="\033[0;36m"
 RESET="\033[0m"
 
 echo "
-     ██╗███████╗██████╗ ██╗ ██████╗██╗  ██╗ ██████╗ 
-     ██║██╔════╝██╔══██╗██║██╔════╝██║  ██║██╔═══██╗
-     ██║█████╗  ██████╔╝██║██║     ███████║██║   ██║
-██   ██║██╔══╝  ██╔══██╗██║██║     ██╔══██║██║   ██║
-╚█████╔╝███████╗██║  ██║██║╚██████╗██║  ██║╚██████╔╝
- ╚════╝ ╚══════╝╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝ ╚═════╝ 
+
+
+     ██╗██████╗        ██████╗██╗  ██╗ ██████╗ 
+     ██║██╔══██╗      ██╔════╝██║  ██║██╔═══██╗
+     ██║██████╔╝█████╗██║     ███████║██║   ██║
+██   ██║██╔══██╗╚════╝██║     ██╔══██║██║   ██║
+╚█████╔╝██║  ██║      ╚██████╗██║  ██║╚██████╔╝
+ ╚════╝ ╚═╝  ╚═╝       ╚═════╝╚═╝  ╚═╝ ╚═════╝ 
+                                               
+
 "
 
 # Root directory of dotfiles
@@ -53,6 +57,7 @@ PACKAGES=(
   tmux
   btop
   ripgrep
+  ly 
 )
 
 yay -S --noconfirm "${PACKAGES[@]}"
@@ -61,7 +66,7 @@ echo -e "${CYAN}==> Creating config directories if not exist...${RESET}"
 mkdir -p ~/.config
 
 echo -e "${CYAN}==> Linking dotfiles...${RESET}"
-# Loop through configs and link them
+
 ln -sf "$DOTFILES_DIR/.zshrc" ~/.zshrc
 ln -sf "$DOTFILES_DIR/.tmux.conf" ~/.tmux.conf
 
@@ -87,12 +92,11 @@ echo -e "${CYAN}==> Setting wallpaper (optional)...${RESET}"
 xwallpaper --zoom ~/.config/wallpaper/panes.png || echo "xwallpaper not installed or failed to set wallpaper"
 
 echo -e "${CYAN}==> Configuring ZSH and Starship...${RESET}"
-# Ensure Zsh is the default shell
+
 if [[ "$SHELL" != *zsh ]]; then
   chsh -s "$(which zsh)"
 fi
 
-# Add starship to zshrc if not already present
 if ! grep -q 'starship init' ~/.zshrc; then
   echo 'eval "$(starship init zsh)"' >> ~/.zshrc
 fi
@@ -101,5 +105,12 @@ echo -e "${CYAN}==> Enabling essential services...${RESET}"
 sudo systemctl enable --now NetworkManager.service || true
 sudo systemctl enable --now bluetooth.service || true
 
-echo -e "${GREEN}✅ Done! Please reboot or re-login to apply shell and i3 session changes.${RESET}"
+echo -e "${CYAN}==> Setting up Ly Display Manager...${RESET}"
+sudo systemctl enable ly.service
 
+echo -e "${CYAN}==> Disabling other display managers (if present)...${RESET}"
+sudo systemctl disable gdm.service || true
+sudo systemctl disable sddm.service || true
+sudo systemctl disable lightdm.service || true
+
+echo -e "${GREEN}Done! Please reboot or re-login to apply shell and i3 session changes.${RESET}"
