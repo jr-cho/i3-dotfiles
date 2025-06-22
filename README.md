@@ -40,8 +40,8 @@ A carefully curated collection of configuration files for a productive and aesth
 2. **Run the installation script:**
 
    ```bash
-   chmod +x install.sh
-   ./install.sh
+   chmod +x install-packages.sh
+   ./install-packages.sh
    ```
 
 3. **Reboot or restart your display manager** to apply all changes.
