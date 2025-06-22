@@ -56,12 +56,13 @@ CONFIGS=(
 # Base packages to install.
 PACKAGES=(
   bat
-  bluetooth # Added as per your script
+  bluetooth
   btop
   curl
   dmenu
   dunst
   feh
+  firefox
   flameshot
   git
   i3-wm
@@ -74,6 +75,7 @@ PACKAGES=(
   picom
   ripgrep
   starship
+  thunar
   tmux
   ttf-firacode-nerd
   ttf-jetbrains-mono
