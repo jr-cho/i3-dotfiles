@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 
-# Exit on error and undefined variable
 set -euo pipefail
 
-# Colors
 GREEN="\033[0;32m"
 CYAN="\033[0;36m"
 RESET="\033[0m"
 
-echo "
-
+echo -e "
 
      ██╗██████╗        ██████╗██╗  ██╗ ██████╗ 
      ██║██╔══██╗      ██╔════╝██║  ██║██╔═══██╗
@@ -17,60 +14,83 @@ echo "
 ██   ██║██╔══██╗╚════╝██║     ██╔══██║██║   ██║
 ╚█████╔╝██║  ██║      ╚██████╗██║  ██║╚██████╔╝
  ╚════╝ ╚═╝  ╚═╝       ╚═════╝╚═╝  ╚═╝ ╚═════╝ 
-                                               
 
 "
 
-# Root directory of dotfiles
 DOTFILES_DIR="$(pwd)"
 
 echo -e "${CYAN}==> Updating system...${RESET}"
 yay -Syu --noconfirm
 
-echo -e "${CYAN}==> Installing required packages with yay...${RESET}"
+echo -e "${CYAN}==> Do you want to install developer tools (Python, Rust, Go, npm)? [y/N]${RESET}"
+read -r dev_choice
+
+INSTALL_DEV=false
+if [[ "$dev_choice" =~ ^[Yy]$ ]]; then
+  INSTALL_DEV=true
+fi
+
+echo -e "${CYAN}==> Installing packages...${RESET}"
 PACKAGES=(
+  bat
+  bluetooth
+  btop
+  curl
+  dmenu
+  dunst
+  feh
+  flameshot
+  git
   i3-wm
   i3blocks
-  dunst
-  picom
   kitty
-  neovim
-  zathura
-  zathura-pdf-mupdf
-  feh
-  oh-my-posh
+  ly
   neofetch
-  lxappearance
-  rofi
+  neovim
+  oh-my-posh
+  picom
+  ripgrep
+  starship
+  tmux
+  ttf-firacode-nerd
   ttf-jetbrains-mono
   ttf-nerd-fonts-symbols
-  ttf-firacode-nerd
-  flameshot
-  xwallpaper
   unzip
   wget
-  curl
-  git
+  xz
+  zathura
+  zathura-pdf-mupdf
   zsh
-  starship
-  bat
-  tmux
-  btop
-  ripgrep
-  ly 
 )
+
+if $INSTALL_DEV; then
+  echo -e "${CYAN}==> Adding dev tools to package list...${RESET}"
+  PACKAGES+=(
+    python
+    python-pip
+    rustup
+    go
+    nodejs
+    npm
+  )
+fi
 
 yay -S --noconfirm "${PACKAGES[@]}"
 
-echo -e "${CYAN}==> Creating config directories if not exist...${RESET}"
+if $INSTALL_DEV; then
+  echo -e "${CYAN}==> Setting up Rust via rustup...${RESET}"
+  rustup default stable
+fi
+
+echo -e "${CYAN}==> Creating config directories...${RESET}"
 mkdir -p ~/.config
 
 echo -e "${CYAN}==> Linking dotfiles...${RESET}"
-
 ln -sf "$DOTFILES_DIR/.zshrc" ~/.zshrc
 ln -sf "$DOTFILES_DIR/.tmux.conf" ~/.tmux.conf
 
 CONFIGS=(
+  dmenu
   dunst
   i3
   i3blocks
@@ -88,11 +108,7 @@ for cfg in "${CONFIGS[@]}"; do
   ln -sf "$DOTFILES_DIR/.config/$cfg" ~/.config/$cfg
 done
 
-echo -e "${CYAN}==> Setting wallpaper (optional)...${RESET}"
-xwallpaper --zoom ~/.config/wallpaper/panes.png || echo "xwallpaper not installed or failed to set wallpaper"
-
 echo -e "${CYAN}==> Configuring ZSH and Starship...${RESET}"
-
 if [[ "$SHELL" != *zsh ]]; then
   chsh -s "$(which zsh)"
 fi
@@ -108,9 +124,9 @@ sudo systemctl enable --now bluetooth.service || true
 echo -e "${CYAN}==> Setting up Ly Display Manager...${RESET}"
 sudo systemctl enable ly.service
 
-echo -e "${CYAN}==> Disabling other display managers (if present)...${RESET}"
+echo -e "${CYAN}==> Disabling other display managers...${RESET}"
 sudo systemctl disable gdm.service || true
 sudo systemctl disable sddm.service || true
 sudo systemctl disable lightdm.service || true
 
-echo -e "${GREEN}Done! Please reboot or re-login to apply shell and i3 session changes.${RESET}"
+echo -e "${GREEN}✅ Done! Reboot or log in again to apply i3 and shell changes.${RESET}"
